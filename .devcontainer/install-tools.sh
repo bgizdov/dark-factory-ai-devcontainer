@@ -87,6 +87,12 @@ curl -sL https://plandex.ai/install.sh | bash
 echo "✓ Plandex done"
 
 echo ""
+echo "Installing/updating Antigravity CLI..."
+export PATH="$HOME/.local/bin:$PATH"
+curl -fsSL https://antigravity.google/cli/install.sh | bash
+echo "✓ Antigravity CLI done"
+
+echo ""
 echo "=========================================="
 echo "Complete!"
 echo "=========================================="
@@ -119,5 +125,6 @@ verify_tool "Crush" "crush"
 verify_tool "Qwen Code" "qwen"
 verify_tool "Happy Coder" "happy"
 verify_tool "Copilot CLI" "copilot"
+verify_tool "Antigravity CLI" "agy"
 verify_tool "ngrok" "ngrok"
 verify_tool "cloudflared" "cloudflared"
