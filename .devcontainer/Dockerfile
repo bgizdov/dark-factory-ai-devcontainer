@@ -59,7 +59,6 @@ COPY install-tools.sh /root
 RUN chmod +x /root/install-tools.sh && CI=true /root/install-tools.sh && \
     cp -f /root/.local/bin/* /usr/local/bin/ 2>/dev/null || true && \
     cp -r /root/.local/share /usr/local/ 2>/dev/null || true && \
-    cp -r /usr/local/lib/node_modules /usr/local/ 2>/dev/null || true && \
     chown -R ${USERNAME}:${USERNAME} /usr/local/bin /usr/local/share /usr/local/lib/node_modules
 
 

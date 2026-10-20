@@ -17,8 +17,18 @@ install_or_update_npm_tool() {
     local name=$1
     local package=$2
     echo "Installing/updating $name..."
-    npm install -g $package
+    # --allow-scripts is needed by npm 11+ for packages with install scripts
+    # (e.g. @opencode/cli, which links the native binary). Older npm ignores it.
+    npm install -g "$package" --allow-scripts="$package"
     echo "✓ $name done"
+}
+
+remove_legacy_npm_tool() {
+    local name=$1
+    local package=$2
+    echo "Removing legacy $name..."
+    npm uninstall -g "$package" >/dev/null 2>&1 || true
+    echo "✓ $name removed"
 }
 
 echo "Installing/updating npm tools..."
@@ -31,7 +41,11 @@ echo "✓ Claude Code done"
 echo ""
 install_or_update_npm_tool "Auggie CLI" "@augmentcode/auggie"
 echo ""
-install_or_update_npm_tool "OpenCode" "opencode-ai"
+# OpenCode v1 (opencode-ai) and v2 (@opencode/cli) both provide the `opencode`
+# binary, so the v1 package has to go before v2 is installed.
+remove_legacy_npm_tool "OpenCode v1" "opencode-ai"
+echo ""
+install_or_update_npm_tool "OpenCode v2" "@opencode/cli"
 echo ""
 install_or_update_npm_tool "Gemini CLI" "@google/gemini-cli"
 echo ""
@@ -72,11 +86,14 @@ echo "✓ Kimi Code done"
 echo ""
 echo "Installing/updating Kiro CLI..."
 export PATH="$HOME/.local/bin:$PATH"
-if [ ! -firo-cli ]; then ~/.local/bin/k
-    curl -fsSL https://desktop-release.q.us-east-1.amazonaws.com/latest/kiro-cli-linux.tar.gz -o /tmp/kiro.tar.gz && \
-    tar -xzf /tmp/kiro.tar.gz -C ~/.local/bin && \
-    chmod +x ~/.local/bin/kiro-cli ~/.local/bin/kiro-cli-chat ~/.local/bin/kiro-cli-term && \
-    rm -f /tmp/kiro.tar.gz
+if [ ! -f "$HOME/.local/bin/kiro-cli" ]; then
+    if curl -fsSL https://desktop-release.q.us-east-1.amazonaws.com/latest/kiro-cli-linux.tar.gz -o /tmp/kiro.tar.gz && \
+       tar -xzf /tmp/kiro.tar.gz -C ~/.local/bin && \
+       chmod +x ~/.local/bin/kiro-cli ~/.local/bin/kiro-cli-chat ~/.local/bin/kiro-cli-term; then
+        rm -f /tmp/kiro.tar.gz
+    else
+        echo "⚠ Kiro CLI download failed - skipping (not fatal)"
+    fi
 fi
 echo "✓ Kiro CLI done"
 
@@ -111,7 +128,7 @@ verify_tool() {
 
 verify_tool "Claude Code" "claude"
 verify_tool "Auggie CLI" "auggie"
-verify_tool "OpenCode" "opencode"
+verify_tool "OpenCode v2" "opencode"
 verify_tool "Gemini CLI" "gemini"
 verify_tool "Kilo CLI" "kilo"
 verify_tool "Vicoa" "vicoa"

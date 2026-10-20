@@ -26,7 +26,7 @@ Perfect for developers who want a consistent, reproducible development environme
 | Claude Code | `claude` | `@anthropic-ai/claude-code` | Anthropic's AI assistant |
 | Auggie | `auggie` | `@augmentcode/auggie` | Augment Code's AI assistant |
 | Gemini CLI | `gemini` | `@google/gemini-cli` | Google's Gemini AI tool |
-| OpenCode | `opencode` | `opencode-ai` | OpenCode AI coding tool |
+| OpenCode | `opencode` | `@opencode/cli` | OpenCode v2 AI coding tool |
 | Kilo CLI | `kilo` | `@kilocode/cli` | Kilo AI assistant |
 | Codex CLI | `codex` | `@openai/codex` | OpenAI's Codex CLI |
 | Cline | `cline` | `cline` | AI coding assistant |
@@ -37,6 +37,14 @@ Perfect for developers who want a consistent, reproducible development environme
 | Kimi Code | `kimi` | `curl -L code.kimi.com/install.sh` | Kimi AI assistant |
 | Kiro CLI | `kiro-cli` | Manual install | AWS Q CLI (Kiro) |
 | Plandex | `plandex` | `curl -sL https://plandex.ai/install.sh` | AI task manager |
+
+> **OpenCode v2**: v2 is published as `@opencode/cli` on npm (the old `opencode-ai`
+> package is v1 and is no longer installed). Both versions ship an `opencode`
+> binary, so the installer removes `opencode-ai` before installing `@opencode/cli`.
+> The npm package's `postinstall` script links the native binary for your
+> platform, so npm 11+ users need `--allow-scripts` (the install script passes it).
+> Alternative installs: `curl -fsSL https://opencode.ai/v2/install | bash` or
+> `brew install anomalyco/tap/opencode-v2`.
 
 ### Tunneling Tools
 - **ngrok** - Secure tunneling (via npm)
